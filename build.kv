@@ -1,0 +1,129 @@
+#:import Factory kivy.factory.Factory
+
+<scrollLbl@Label>
+    font_size: 52
+    bold: True
+
+
+
+<WarningPopUp@Popup>
+    auto_dismiss: False
+    title: 'Incorrect number of characters'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'You must enter exactly 6 letters,\nokay mum?\nI love you!'
+            font_size: 45
+            bold: True
+            background_color: (1, 1, 1, 1)
+        Button:
+            text: 'close'
+            font_size: 80
+            italic: True
+            color: (1, .1, .1, 1)
+            background_color: (.2, .2, .2, 1)
+            on_release: root.dismiss()
+
+<WordFinder>:
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgba: (.2, .2, .6, .8)
+        Rectangle:
+            source: 'angularBrush.png'
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 15
+            Button:
+                background_color: 0, 0, 0, 0
+                size_hint: .5, .7
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                text: 'Search'
+                font_size: '50'
+                on_release: root.word_maker(txtinpt.text, root.length, root.word_list) if len(txtinpt.text) == 6 else Factory.WarningPopUp().open()
+                canvas.before:
+                    Color:
+                        rgba: (.01, .3, .52, 1) if self.state=='normal' else (0,.7,.7,1)
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [50,]
+            TextInput:
+                id: txtinpt
+                multiline: False
+                size_hint: .5, .7
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                hint_text: 'Enter chars...'
+                font_size: 55
+                on_text_validate: root.getChars() if len(txtinpt.text) == 6 else Factory.WarningPopUp().open()
+        BoxLayout:
+            orientation: 'horizontal'
+            Bubble:
+                color: (.2, .5, .2, .8)
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 15
+                    Label:
+                        text: '3 letter'
+                        font_size: 40
+                    CheckBox:
+                        id: chkb3
+                        group: 'length'
+                        on_press: root.getLength(3)
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 15
+                    Label:
+                        text: '4 letter'
+                        font_size: 40
+                    CheckBox:
+                        id: chkb4
+                        group: 'length'
+                        on_press: root.getLength(4)
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 15
+                    Label:
+                        text: '5 letter'
+                        font_size: 40
+                    CheckBox:
+                        id: chkb5
+                        group: 'length'
+                        on_press: root.getLength(5)
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 15
+                    Label:
+                        text: '6 letter'
+                        font_size: 40
+                    CheckBox:
+                        id: chkb6
+                        group: 'length'
+                        on_press: root.getLength(6)
+                        active: True
+                        value: 6
+
+    BoxLayout:
+        spacing: 25
+        padding: 25
+        orientation: 'vertical'
+        Bubble:
+            BoxLayout:
+                RecycleView:
+                    id: rv
+                    viewclass: 'scrollLbl'
+                    RecycleBoxLayout:
+                        default_size: None, dp(56)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        font_size: 20
+                        orientation: 'vertical'
+
+
